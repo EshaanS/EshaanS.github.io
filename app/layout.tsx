@@ -21,11 +21,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Eshaan Singh — Software Engineer",
     description: "Software Engineer based in Bellevue, WA. React, Python, FastAPI.",
-    url: "https://trimstream.github.io",
+    url: "https://eshaans.github.io",
     type: "website",
   },
   icons: {
-    icon: "/TrimStream.jpg",
+    icon: "/eshaan.jpg",
   },
 };
 
