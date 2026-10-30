@@ -6,7 +6,7 @@ Live at [eshaans.github.io](https://eshaans.github.io)
 
 ## About
 
-Full-stack developer and AI engineer based in the Seattle area. CS graduate from Washington State University with a minor in Mathematics. I build AI-powered applications, real-time data pipelines, and full-stack web tools.
+Full-stack developer and AI engineer based in the Seattle area. CS graduate from Washington State University with a minor in Mathematics. I build AI-powered applications, data pipelines, and full-stack web tools.
 
 ## Featured Projects
 
@@ -21,7 +21,7 @@ Next.js, TypeScript, React, CSS
 ## Running Locally
 
 ```bash
-cd portfolio
+cd EshaanS.github.io
 npm install
 npm run dev
 ```
