@@ -146,7 +146,7 @@ export default function Home() {
             <li><a href="#projects">Projects</a></li>
             <li><a href="#skills">Skills</a></li>
           </ul>
-          <ExternalLink className="btn btn-primary" href={site.resume}>Resume</ExternalLink>
+          <ExternalLink className="btn" href={site.resume}>Resume</ExternalLink>
         </div>
       </nav>
 
@@ -214,10 +214,10 @@ export default function Home() {
               {large.map((project) => (
                 <article className="feature" key={project.name}>
                   <div className="feature-head">
-                    <ProjectHead project={project} />
                     {shots[project.name] && (
-                      <Screenshot shot={shots[project.name]} sizes="(min-width: 56rem) 24rem, 100vw" />
+                      <Screenshot shot={shots[project.name]} sizes="(min-width: 56rem) 27rem, 100vw" />
                     )}
+                    <ProjectHead project={project} />
                   </div>
                   <div className="feature-body">
                     <Bullets items={project.bullets} />

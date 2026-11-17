@@ -6,11 +6,11 @@ Live at [eshaans.github.io](https://eshaans.github.io)
 
 ## About
 
-Software developer in the Seattle area, open to relocating to San Francisco.
+Software developer in the Seattle area, open to relocating.
 
 ## What is on the site
 
-- **Experience** - one card per role, newest first
+- **Experience** - one card per role, newest first, with a date column
 - **Projects** - signal-router, TrainingARK, FinSight, Mod the Agents, MarketMind, SentiPulse, ClubHub, OpenWillis
 - **Skills**
 
@@ -18,21 +18,42 @@ Each card shows its first 4 bullets. Any further bullets sit behind a "Show more
 
 All of the copy lives in [`app/content.ts`](app/content.ts). Edit that file to change what the page says.
 
-## Resume (action needed)
+## Design
 
-The Resume button on the site links to `/resume.pdf`. That file is not in the repo yet, so the button returns a 404 until you add it.
+The design tokens (colors, type, spacing, the one radius and the one shadow) are documented at the top of [`app/globals.css`](app/globals.css).
 
-Drop your resume at:
+### Fonts
 
+Two families, both loaded and self-hosted at build time by `next/font` in [`app/layout.tsx`](app/layout.tsx):
+
+- **Archivo** for display: the name, headings, role and project names, and figures. Its width axis is loaded so the CSS can set it slightly wide (`font-stretch: 112%`).
+- **Public Sans** for all other text.
+
+To change either, swap the import in `app/layout.tsx`. The CSS reads them through `--font-display` and `--font-text`.
+
+### Project screenshots
+
+The screenshots in the Projects section are real captures of the live demos, stored as WebP in `public/shots/` at 480, 800 and 1200 pixels wide.
+
+To recapture them after a demo changes:
+
+```bash
+npm install --no-save playwright-core
+node scripts/capture-screenshots.mjs              # all three
+node scripts/capture-screenshots.mjs trainingark  # only the ones named
 ```
-public/resume.pdf
-```
 
-The filename has to be exactly `resume.pdf`. Commit it and push to `main`, and the button works.
+The script drives the Microsoft Edge already installed on the machine (set `PLAYWRIGHT_CHANNEL=chrome` for Chrome). `--no-save` keeps Playwright out of `package.json`, so the site's own install and the deploy are unaffected.
+
+Look at each image before committing it: a demo that is asleep, erroring or showing a sign-in page is captured exactly as it looks. If what a screenshot shows has changed, update its alt text in [`app/screens.ts`](app/screens.ts). That file also decides which projects get the large cards.
+
+## Resume
+
+The Resume buttons link to `/resume.pdf`, which is `public/resume.pdf` in this repo. To update it, replace that file. The filename has to stay exactly `resume.pdf`.
 
 ## Link preview image
 
-`public/og.png` (1200x630) is the image shown when the site is shared on LinkedIn, Slack, X and similar. It contains the name, role and the one-line summary as text, so if you change the summary in `app/content.ts`, replace this image too.
+`public/og.png` (1200x630) is the image shown when the site is shared on LinkedIn, Slack, X and similar. It shows the name and role only, so it does not need to change when the summary does. Replace it if the name, role or the look of the site changes.
 
 ## Tech Stack
 

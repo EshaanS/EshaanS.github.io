@@ -14,9 +14,14 @@ export type Shot = {
 export const featured = ["signal-router", "TrainingARK"];
 
 // Screenshots captured from the live demos by scripts/capture-screenshots.mjs.
-// TrainingARK has a live demo but no screenshot yet: its home page was returning
-// an error when these were captured. Add it here once the demo loads again.
+// The alt text describes what each capture actually shows; update it when recapturing.
 export const shots: Record<string, Shot> = {
+  TrainingARK: {
+    base: "/shots/trainingark",
+    width: 1200,
+    height: 750,
+    alt: "TrainingARK home page: a list of the newest scenarios, each marked Beginner and tagged with its commanders, beside a sidebar with Home, Create, Tutorial, Rules & Banlist and About.",
+  },
   FinSight: {
     base: "/shots/finsight",
     width: 1200,

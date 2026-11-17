@@ -216,7 +216,17 @@ p, li, dd { text-wrap: pretty; }
 
 .nav li a:hover { color: var(--ink); }
 
-.nav .btn { flex: none; }
+/* Outlined here; the hero carries the one filled button. */
+.nav .btn {
+  flex: none;
+  border-color: var(--cobalt);
+  color: var(--cobalt);
+}
+
+.nav .btn:hover {
+  background: var(--cobalt);
+  color: var(--on-cobalt);
+}
 
 /* Hero */
 .hero {
@@ -484,7 +494,10 @@ h3 {
 .card-text { max-width: var(--measure); }
 
 /* "Show more" toggle: a native <details>, so it works without JavaScript. */
-.more { margin-top: 0.5rem; }
+.more {
+  margin-top: 0.5rem;
+  margin-bottom: -0.625rem;
+}
 
 .more summary {
   display: inline-flex;
@@ -683,22 +696,16 @@ h3 {
   .role:first-child::before { top: 1.75rem; }
   .role:last-child::before { bottom: auto; height: 1.75rem; }
 
-  /* One marker per role on the rule; the current role's is filled. */
-  .role::after {
+  /* Only the current role is marked on the rule. */
+  .role-current::after {
     content: "";
     position: absolute;
     top: 1.75rem;
     left: calc(var(--rail) + 1.25rem);
     width: 0.5rem;
     height: 0.5rem;
-    background: var(--paper);
-    box-shadow: inset 0 0 0 1px var(--rule-strong);
-    translate: -50% -50%;
-  }
-
-  .role-current::after {
     background: var(--cobalt);
-    box-shadow: none;
+    translate: -50% -50%;
   }
 
   .role-when {
@@ -737,11 +744,13 @@ h3 {
 }
 
 .feature h3 { font-size: clamp(1.25rem, 1.1rem + 1cqi, 1.75rem); }
-.feature-head .shot { margin-top: 0.5rem; }
+/* A featured card with a screenshot is led by it, like the cards in tier two. */
+.feature-head .shot { margin-bottom: 0.5rem; }
 
 @container (min-width: 46rem) {
+  /* Same split for every featured card, so their bullets line up. */
   .feature {
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
     grid-template-rows: auto 1fr;
     gap: 1rem 2.5rem;
   }

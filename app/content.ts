@@ -128,6 +128,7 @@ export const projects: Project[] = [
   },
   {
     name: "TrainingARK",
+    note: "Prototype",
     bullets: [
       "Conceived and built solo, from an ambiguous idea to a deployed product, with no spec handed down.",
       "Tracked 24 zones across 4 players live in a centralized Zustand store exposing 50+ actions.",
