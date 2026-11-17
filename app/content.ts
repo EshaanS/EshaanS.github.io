@@ -27,8 +27,8 @@ export const site = {
   role: "Software Engineer",
   title: "Eshaan Singh, Software Engineer",
   summary:
-    "Software developer at TechMagnet, where I built the Amazon FBA reconciliation platform that traces every unit from inbound shipment to payout.",
-  location: "Seattle area, open to relocating to San Francisco.",
+  "Software engineer with internship and professional experience in full-stack development and data systems. Hands-on experience building reliable data pipelines and AI agents, with expertise in Python, TypeScript and SQL. Built a system that traces every unit of inventory across 94 shipments and saves about 15 hours of manual work a week, and placed in the top 10% of a 24-hour AI hackathon, bringing strong ownership and reliability to small, fast-moving teams.",
+  location: "Seattle area, open to relocating.",
   url: "https://eshaans.github.io",
   email: "eshaan.singh09@gmail.com",
   resume: "/resume.pdf",
