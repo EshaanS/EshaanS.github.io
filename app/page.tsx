@@ -1,4 +1,7 @@
-import { also, experience, projects, site, skills } from "./content";
+import { experience, projects, site, skills } from "./content";
+
+// Cards show this many bullets; the rest sit behind a "Show more" toggle.
+const VISIBLE_BULLETS = 4;
 
 function ExternalLink({ href, className, children }: { href: string; className?: string; children: React.ReactNode }) {
   return (
@@ -6,6 +9,38 @@ function ExternalLink({ href, className, children }: { href: string; className?:
       {children}
       <span className="sr-only"> (opens in a new tab)</span>
     </a>
+  );
+}
+
+function Bullets({ items }: { items: string[] }) {
+  if (items.length === 1) {
+    return <p className="card-text">{items[0]}</p>;
+  }
+
+  const rest = items.slice(VISIBLE_BULLETS);
+
+  return (
+    <>
+      <ul className="bullets">
+        {items.slice(0, VISIBLE_BULLETS).map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+      {rest.length > 0 && (
+        // <details> so the toggle works with JavaScript turned off.
+        <details className="more">
+          <summary>
+            <span className="more-closed">Show {rest.length} more</span>
+            <span className="more-open">Show less</span>
+          </summary>
+          <ul className="bullets">
+            {rest.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </>
   );
 }
 
@@ -42,27 +77,33 @@ export default function Home() {
         <section className="section" id="experience" aria-labelledby="experience-heading">
           <h2 id="experience-heading">Experience</h2>
 
-          {experience.map((job) => (
-            <article className="job" key={job.company}>
-              <div className="job-head">
-                <h3>{job.title}, {job.company}</h3>
-                <p className="job-dates">{job.dates}</p>
-              </div>
-              <ul className="highlights">
-                {job.highlights.map((highlight) => (
-                  <li key={highlight.label}>
-                    <strong>{highlight.value}</strong>
-                    <span>{highlight.label}</span>
-                  </li>
-                ))}
-              </ul>
-              <ul className="bullets">
-                {job.bullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
-                ))}
-              </ul>
-            </article>
-          ))}
+          <div className="cards">
+            {experience.map((job) => (
+              <article className="card" key={`${job.company} ${job.title}`}>
+                <div className="card-head">
+                  <div>
+                    <h3>{job.title}</h3>
+                    <p className="card-org">
+                      {job.company}
+                      {job.location && <span>{job.location}</span>}
+                    </p>
+                  </div>
+                  <p className="card-dates">{job.dates}</p>
+                </div>
+                {job.highlights && (
+                  <ul className="highlights">
+                    {job.highlights.map((highlight) => (
+                      <li key={highlight.label}>
+                        <strong>{highlight.value}</strong>
+                        <span>{highlight.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <Bullets items={job.bullets} />
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="section" id="projects" aria-labelledby="projects-heading">
@@ -72,44 +113,28 @@ export default function Home() {
             {projects.map((project) => (
               <article className="card" key={project.name}>
                 <div className="card-head">
-                  <h3>{project.name}</h3>
-                  <ul className="card-links" aria-label={`${project.name} links`}>
-                    {project.links.map((link) => (
-                      <li key={link.href}>
-                        <ExternalLink href={link.href}>
-                          {link.label}<span className="sr-only">: {project.name}</span>
-                        </ExternalLink>
-                      </li>
-                    ))}
-                  </ul>
+                  <div>
+                    <h3>{project.name}</h3>
+                    {project.note && <p className="card-note">{project.note}</p>}
+                  </div>
+                  {project.links.length > 0 && (
+                    <ul className="card-links" aria-label={`${project.name} links`}>
+                      {project.links.map((link) => (
+                        <li key={link.href}>
+                          <ExternalLink href={link.href}>
+                            {link.label}<span className="sr-only">: {project.name}</span>
+                          </ExternalLink>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <p className="card-desc">{project.description}</p>
-                {project.result && <p className="card-result">{project.result}</p>}
-                {project.details && (
-                  <ul className="bullets">
-                    {project.details.map((detail) => (
-                      <li key={detail}>{detail}</li>
-                    ))}
-                  </ul>
-                )}
+                <Bullets items={project.bullets} />
                 <ul className="tags" aria-label="Stack">
                   {project.tags.map((tag) => (
                     <li key={tag}>{tag}</li>
                   ))}
                 </ul>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="section" id="also" aria-labelledby="also-heading">
-          <h2 id="also-heading">Also</h2>
-
-          <div className="also">
-            {also.map((item) => (
-              <article key={item.name}>
-                <h3>{item.name}</h3>
-                <p>{item.description}</p>
               </article>
             ))}
           </div>

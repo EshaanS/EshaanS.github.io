@@ -10,10 +10,11 @@ Software developer in the Seattle area, open to relocating to San Francisco.
 
 ## What is on the site
 
-- **Experience** - Software Developer at TechMagnet
-- **Projects** - signal-router, TrainingARK, FinSight, MarketMind, Mod the Agents
-- **Also** - OpenWillis, ClubHub
+- **Experience** - one card per role, newest first
+- **Projects** - signal-router, TrainingARK, FinSight, Mod the Agents, MarketMind, SentiPulse, ClubHub, OpenWillis
 - **Skills**
+
+Each card shows its first 4 bullets. Any further bullets sit behind a "Show more" toggle built on `<details>`, so it works without JavaScript.
 
 All of the copy lives in [`app/content.ts`](app/content.ts). Edit that file to change what the page says.
 

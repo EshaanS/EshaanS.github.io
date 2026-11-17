@@ -230,54 +230,7 @@ p, li, dd { text-wrap: pretty; }
 
 .bullets li::marker { color: var(--border-strong); }
 
-/* Experience */
-.job-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 2px 16px;
-}
-
-.job h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.job-dates {
-  color: var(--muted);
-  font-size: 0.9375rem;
-}
-
-.highlights {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px 24px;
-  margin: 20px 0 24px;
-  padding: 18px 0;
-  border-block: 1px solid var(--border);
-  list-style: none;
-}
-
-.highlights strong {
-  display: block;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-.highlights span {
-  display: block;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.45;
-  text-wrap: balance;
-}
-
-/* Project cards */
+/* Cards: one per role and one per project */
 .cards {
   display: grid;
   gap: 16px;
@@ -307,6 +260,22 @@ p, li, dd { text-wrap: pretty; }
   line-height: 1.4;
 }
 
+.card-org { font-weight: 500; }
+
+.card-org span {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* Location sits beside the company; on small screens it drops to its own line. */
+.card-org span::before { content: "\00a0\00b7\00a0"; }
+
+.card-dates,
+.card-note {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
 .card-links {
   display: flex;
   gap: 18px;
@@ -329,25 +298,87 @@ p, li, dd { text-wrap: pretty; }
   text-underline-offset: 3px;
 }
 
-.card-desc {
-  margin-top: 6px;
-  max-width: 68ch;
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 24px;
+  margin-top: 18px;
+  padding: 16px 0;
+  border-block: 1px solid var(--border);
+  list-style: none;
 }
 
-.card-result {
-  margin-top: 14px;
-  max-width: 68ch;
-  padding-left: 12px;
-  border-left: 2px solid var(--accent);
-  font-weight: 500;
+.highlights strong {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
+.highlights span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  text-wrap: balance;
+}
+
+.card-text,
 .card .bullets {
   margin-top: 14px;
-  gap: 6px;
-  color: var(--muted);
   font-size: 0.9375rem;
 }
+
+.card-text { max-width: 68ch; }
+.card .bullets { gap: 8px; }
+
+/* "Show more" toggle: a native <details>, so it works without JavaScript. */
+.more { margin-top: 8px; }
+
+.more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 0;
+  color: var(--accent);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.more summary::-webkit-details-marker { display: none; }
+.more summary:hover { color: var(--accent-hover); }
+
+.more summary::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin-left: 2px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.15s;
+}
+
+.more[open] summary::before { transform: translateY(2px) rotate(-135deg); }
+
+.more-open,
+.more[open] .more-closed { display: none; }
+.more[open] .more-open { display: inline; }
+
+/* When open, put "Show less" under the extra bullets (falls back to above them). */
+.more[open] {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+}
+
+.more[open] summary { margin-top: 6px; }
+.card .more .bullets { margin-top: 0; }
 
 .tags {
   display: flex;
@@ -366,22 +397,6 @@ p, li, dd { text-wrap: pretty; }
   font-family: var(--mono);
   font-size: 0.75rem;
   line-height: 1.6;
-}
-
-/* Also */
-.also {
-  display: grid;
-  gap: 20px;
-}
-
-.also h3 {
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.also p {
-  max-width: 68ch;
-  color: var(--muted);
 }
 
 /* Skills */
@@ -433,6 +448,8 @@ p, li, dd { text-wrap: pretty; }
   .hero { padding: 48px 0 44px; }
   .section { padding: 44px 0; }
   .card { padding: 20px; }
+  .card-org span { display: block; font-size: 0.9375rem; }
+  .card-org span::before { content: none; }
 
   .highlights { grid-template-columns: 1fr; gap: 10px; }
   .highlights li { display: flex; align-items: baseline; gap: 12px; }
