@@ -58,6 +58,9 @@ body {
 
 a { color: inherit; }
 
+/* Avoid one-word last lines where the browser supports it. */
+p, li, dd { text-wrap: pretty; }
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
@@ -271,6 +274,7 @@ a { color: inherit; }
   color: var(--muted);
   font-size: 0.875rem;
   line-height: 1.45;
+  text-wrap: balance;
 }
 
 /* Project cards */
@@ -410,7 +414,8 @@ a { color: inherit; }
 
 .footer ul {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 0 20px;
   list-style: none;
 }
 
@@ -439,6 +444,7 @@ a { color: inherit; }
 
 @media (max-width: 440px) {
   .actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .footer li:first-child { flex-basis: 100%; }
 }
 
 @media (prefers-reduced-motion: no-preference) {

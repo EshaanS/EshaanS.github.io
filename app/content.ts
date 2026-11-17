@@ -60,8 +60,9 @@ export const experience: Job[] = [
 export const projects: Project[] = [
   {
     name: "signal-router",
+    // ‑ is a non-breaking hyphen, so "24-hour" never splits across two lines.
     description:
-      "A retrieval-first routing agent with a deterministic safety layer, built for the HackerRank Orchestrate 24-hour hackathon.",
+      "A retrieval-first routing agent with a deterministic safety layer, built for the HackerRank Orchestrate 24‑hour hackathon.",
     result:
       "92% retrieval hit@3 with zero pipeline errors across 110 real messages. Placed in the top 10% of participants.",
     details: [
