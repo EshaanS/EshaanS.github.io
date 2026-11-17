@@ -100,7 +100,7 @@ export const experience: Job[] = [
     ],
   },
   {
-    title: "Python Developer",
+    title: "Software Engineer",
     company: "My Technology Geeks",
     location: "Kent, WA",
     dates: "May 2021 to Jun 2022",
@@ -110,15 +110,6 @@ export const experience: Job[] = [
       "Designed and built a Python and Bash automation system that scanned networks and pulled hardware specifications across the full 100+ system fleet, replacing a manual per-machine inspection process.",
       "Automated driver installation and hardware configuration across the fleet.",
       "Diagnosed hardware and network configuration issues across the fleet and built scripting to resolve recurring problems at scale.",
-    ],
-  },
-  {
-    title: "Advising Office Front Desk",
-    company: "Lake Washington Institute of Technology",
-    location: "Kirkland, WA",
-    dates: "2021 to 2022",
-    bullets: [
-      "Staffed the front desk of the Advising Office, assisting students with scheduling and general inquiries (part-time, alongside the My Technology Geeks role).",
     ],
   },
 ];
