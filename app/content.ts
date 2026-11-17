@@ -207,10 +207,10 @@ export const projects: Project[] = [
 
 export const skills = [
   { label: "Languages", items: ["Go", "Python", "C#", "TypeScript", "JavaScript", "SQL"] },
-  { label: "Frameworks", items: ["React", "Next.js", "FastAPI", "Django", "Node.js"] },
-  { label: "Data", items: ["PostgreSQL", "SQL Server", "Azure SQL", "Prisma", "MongoDB"] },
+  { label: "Frameworks", items: ["React", "Next.js", "FastAPI", "Django", "Node.js", "Express", "Tailwind CSS", "Zustand", "Auth.js", ".NET Framework"] },
+  { label: "Data", items: ["PostgreSQL", "SQL Server", "Azure SQL", "Prisma", "MongoDB", "MySQL", "Supabase", "Prisma", "Flyway migrations"] },
   {
     label: "AI / Testing",
-    items: ["Claude Code (daily use)", "Google Gemini API", "PyTest", "Vitest", "parity and regression testing"],
+    items: ["Claude Code", "Google Gemini API", "HuggingFace", "scikit-learn", "PyTest", "Vitest", "unittest", "parity and regression testing"],
   },
 ];
