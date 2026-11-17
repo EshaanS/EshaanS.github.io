@@ -2,7 +2,7 @@
   The ledger sheet.
 
   Color   Six named tokens. Hairline rules are Ink at a low alpha, not a seventh color.
-          Green means "reconciled" and appears nowhere else.
+          Green marks the finished state of the hero trace and appears nowhere else.
   Type    Archivo (set slightly wide) for display, Public Sans for text. No monospace.
   Radius  One value, only on objects that sit on top of the paper: sheets, buttons, screenshots.
           Anything ruled (rows, timeline, the trace, stack lists) has square corners.
@@ -245,10 +245,14 @@ p, li, dd { text-wrap: pretty; }
 }
 
 /*
-  The trace: the rule under the name. One unit moves from Shipment to Payout and
-  lands reconciled. The finished state is the default style and the animation plays
-  from the start state, so reduced-motion users and narrow screens simply see the
-  finished line.
+  The trace: the rule under the name. One unit moves through the four stages and
+  lands on the green check. The finished state is the default style and the animation
+  plays from the start state, so reduced-motion users and narrow screens simply see
+  the finished line.
+
+  The stage names live in page.tsx. The geometry below assumes four stages plus the
+  final mark: four equal hops. Changing the count means updating the divisor, the
+  grid columns and both keyframe blocks.
 */
 .trace {
   --unit: 0.75rem;
@@ -290,9 +294,9 @@ p, li, dd { text-wrap: pretty; }
   translate: 0 -50%;
 }
 
-/* One slot per stage, i = 0..4. */
+/* One slot per stage, i = 0..3. */
 .trace-slot {
-  left: calc(var(--i) / 5 * (100% - var(--slot)));
+  left: calc(var(--i) / 4 * (100% - var(--slot)));
   width: var(--slot);
   height: var(--slot);
   background: var(--cobalt);
@@ -324,7 +328,7 @@ p, li, dd { text-wrap: pretty; }
   opacity: 0;
 }
 
-/* Narrow: the stage names are a plain wrapped list, in order. */
+/* Narrowest screens: the stage names are a plain list in order, the last one at the right. */
 .trace-stages {
   display: flex;
   flex-wrap: wrap;
@@ -344,11 +348,12 @@ p, li, dd { text-wrap: pretty; }
   font-weight: 600;
 }
 
-/* Wide enough: each name sits under its own slot, and the trace runs once. */
-@container (min-width: 36rem) {
+/* From 21rem of column: each name sits under its own slot. */
+@container (min-width: 21rem) {
+  /* minmax(0, ...) keeps the columns exactly equal, so a long name cannot shift the others. */
   .trace-stages {
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
+    grid-template-columns: repeat(8, minmax(0, 1fr));
     gap: 0;
   }
 
@@ -364,43 +369,44 @@ p, li, dd { text-wrap: pretty; }
   }
 
   .trace-stages li:last-child {
-    grid-column: 10 / span 1;
+    grid-column: 8 / span 1;
     justify-self: end;
     margin-left: 0;
   }
+}
 
+/* Wide enough to read the motion: the trace runs once. Below this it stays finished. */
+@container (min-width: 36rem) {
   @media (prefers-reduced-motion: no-preference) {
-    .trace-line { animation: trace-line calc(var(--hop) * 5) var(--wait) both; }
-    .trace-unit { animation: trace-unit calc(var(--hop) * 5 + 0.3s) var(--wait) both; }
+    .trace-line { animation: trace-line calc(var(--hop) * 4) var(--wait) both; }
+    .trace-unit { animation: trace-unit calc(var(--hop) * 4 + 0.3s) var(--wait) both; }
 
     .trace-slot {
       animation: trace-fill 0.2s calc(var(--wait) + var(--i) * var(--hop) - 0.1s) both;
     }
 
-    .trace-end { animation: trace-fill 0.3s calc(var(--wait) + var(--hop) * 5 - 0.05s) both; }
-    .trace-end svg { animation: trace-check 0.3s calc(var(--wait) + var(--hop) * 5 + 0.1s) both; }
-    .trace-stages li:last-child { animation: trace-word 0.3s calc(var(--wait) + var(--hop) * 5) both; }
+    .trace-end { animation: trace-fill 0.3s calc(var(--wait) + var(--hop) * 4 - 0.05s) both; }
+    .trace-end svg { animation: trace-check 0.3s calc(var(--wait) + var(--hop) * 4 + 0.1s) both; }
+    .trace-stages li:last-child { animation: trace-word 0.3s calc(var(--wait) + var(--hop) * 4) both; }
   }
 }
 
-/* Five hops with a short rest at each stage. */
+/* Four hops with a short rest at each stage, then the unit fades into the check. */
 @keyframes trace-unit {
   0% { opacity: 1; transform: translateX(0); }
-  13%, 18% { transform: translateX(calc(0.2 * (100cqi - var(--unit)))); }
-  31%, 36% { transform: translateX(calc(0.4 * (100cqi - var(--unit)))); }
-  49%, 54% { transform: translateX(calc(0.6 * (100cqi - var(--unit)))); }
-  67%, 72% { transform: translateX(calc(0.8 * (100cqi - var(--unit)))); }
-  85%, 91% { opacity: 1; transform: translateX(calc(100cqi - var(--unit))); }
+  16%, 22.2% { transform: translateX(calc(0.25 * (100cqi - var(--unit)))); }
+  38.2%, 44.4% { transform: translateX(calc(0.5 * (100cqi - var(--unit)))); }
+  60.4%, 66.7% { transform: translateX(calc(0.75 * (100cqi - var(--unit)))); }
+  82.6%, 89% { opacity: 1; transform: translateX(calc(100cqi - var(--unit))); }
   100% { opacity: 0; transform: translateX(calc(100cqi - var(--unit))); }
 }
 
 @keyframes trace-line {
   0% { transform: translateY(-50%) scaleX(0); }
-  14.3%, 20% { transform: translateY(-50%) scaleX(0.2); }
-  34.3%, 40% { transform: translateY(-50%) scaleX(0.4); }
-  54.3%, 60% { transform: translateY(-50%) scaleX(0.6); }
-  74.3%, 80% { transform: translateY(-50%) scaleX(0.8); }
-  94.3%, 100% { transform: translateY(-50%) scaleX(1); }
+  17.9%, 25% { transform: translateY(-50%) scaleX(0.25); }
+  42.9%, 50% { transform: translateY(-50%) scaleX(0.5); }
+  67.9%, 75% { transform: translateY(-50%) scaleX(0.75); }
+  92.9%, 100% { transform: translateY(-50%) scaleX(1); }
 }
 
 @keyframes trace-fill {

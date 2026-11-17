@@ -45,17 +45,18 @@ function Bullets({ items }: { items: string[] }) {
   );
 }
 
-// The stages the reconciliation platform follows a unit through (first TechMagnet bullet).
-const TRACE_STAGES = ["Shipment", "Sale", "Return", "Reimbursement", "Payout"];
+// The stages the unit in the hero trace passes through. The CSS geometry assumes four.
+const TRACE_STAGES = ["Spec", "Build", "Test", "Ship"];
+const TRACE_DONE = "Verified";
 
-// The rule under the name: one unit traced through every stage, ending reconciled.
+// The rule under the name: one unit traced through every stage, ending on the green check.
 // CSS only. The markup below is the finished state; the animation plays up to it once.
 function Trace() {
   return (
     <div
       className="trace"
       role="img"
-      aria-label="A single unit of inventory traced from shipment through sale, return, reimbursement and payout, ending reconciled."
+      aria-label="A single unit of work traced through spec, build, test and ship, ending verified."
     >
       <div className="trace-track">
         <span className="trace-line" />
@@ -73,7 +74,7 @@ function Trace() {
         {TRACE_STAGES.map((stage, i) => (
           <li style={{ "--col": i * 2 } as React.CSSProperties} key={stage}>{stage}</li>
         ))}
-        <li>Reconciled</li>
+        <li>{TRACE_DONE}</li>
       </ol>
     </div>
   );
