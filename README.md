@@ -6,13 +6,28 @@ Live at [eshaans.github.io](https://eshaans.github.io)
 
 ## About
 
-Full-stack developer and AI engineer based in the Seattle area. CS graduate from Washington State University with a minor in Mathematics. I build AI-powered applications, data pipelines, and full-stack web tools.
+Software developer in the Seattle area, open to relocating to San Francisco.
 
-## Featured Projects
+## What is on the site
 
-- **FinSight** - Full-stack financial intelligence platform built in Go, Python, and TypeScript with natural language querying powered by Google Gemini AI
-- **MarketMind** - Generative AI tool for consumer insight generation with prompt engineering
-- **SentiPulse** - Sentiment tracker with a HuggingFace NLP pipeline and React dashboard
+- **Experience** - Software Developer at TechMagnet
+- **Projects** - signal-router, TrainingARK, FinSight, MarketMind, Mod the Agents
+- **Also** - OpenWillis, ClubHub
+- **Skills**
+
+All of the copy lives in [`app/content.ts`](app/content.ts). Edit that file to change what the page says.
+
+## Resume (action needed)
+
+The Resume button on the site links to `/resume.pdf`. That file is not in the repo yet, so the button returns a 404 until you add it.
+
+Drop your resume at:
+
+```
+public/resume.pdf
+```
+
+The filename has to be exactly `resume.pdf`. Commit it and push to `main`, and the button works.
 
 ## Tech Stack
 
@@ -27,6 +42,10 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
+
+## Deploying
+
+Pushing to `main` runs `.github/workflows/deploy.yml`, which builds a static export (`npm run build` writes it to `out/`) and publishes it to GitHub Pages.
 
 ## Contact
 

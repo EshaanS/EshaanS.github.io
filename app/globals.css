@@ -94,12 +94,31 @@ a { color: inherit; }
 .hero-sub {
   font-size: 14px;
   color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.hero-summary {
+  font-size: 17px;
+  line-height: 1.6;
+  max-width: 640px;
+  margin-bottom: 10px;
+}
+
+.hero-location {
+  font-size: 14px;
+  color: var(--soft);
   margin-bottom: 32px;
 }
 
 .hero-links {
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+}
+
+.hero-links a.link-resume {
+  color: var(--blue);
+  border-color: var(--blue);
 }
 
 .hero-links a {
@@ -146,6 +165,38 @@ a { color: inherit; }
   flex-shrink: 0;
 }
 
+/* Experience */
+.job-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-bottom: 16px;
+}
+
+.job-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.job-dates {
+  font-size: 13px;
+  color: var(--soft);
+}
+
+.bullets {
+  color: var(--soft);
+  font-size: 14px;
+  line-height: 1.75;
+  max-width: 640px;
+  padding-left: 18px;
+  margin-bottom: 16px;
+}
+
+.bullets li + li { margin-top: 8px; }
+
 /* Projects */
 .project {
   padding: 32px 0;
@@ -163,6 +214,13 @@ a { color: inherit; }
 
 .project-desc {
   color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+  margin-bottom: 16px;
+  max-width: 640px;
+}
+
+.project-result {
   font-size: 14px;
   line-height: 1.75;
   margin-bottom: 16px;
@@ -214,6 +272,17 @@ a { color: inherit; }
 .project-links a.link-primary { color: var(--text); }
 .project-links a.link-primary:hover { color: var(--blue); }
 
+/* Also */
+.also-item + .also-item { margin-top: 24px; }
+
+.also-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.also-item .project-desc { margin-bottom: 0; }
+
 /* Skills */
 .skills-grid {
   display: grid;
@@ -256,6 +325,9 @@ a { color: inherit; }
 /* Responsive */
 @media (max-width: 640px) {
   .navbar { padding: 20px 24px; }
+  .navbar-logo { display: none; }
+  .navbar-links { gap: 14px; width: 100%; justify-content: space-between; }
+  .navbar-links a { letter-spacing: 1px; }
   .hero { padding: 64px 24px 56px; }
   .hero h1 { font-size: 40px; }
   .section { padding: 56px 24px; }

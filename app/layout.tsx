@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, DM_Mono } from "next/font/google";
+import { site } from "./content";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,13 +17,20 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Eshaan Singh — Software Engineer",
-  description: "Software Engineer based in Bellevue, WA. React, Python, FastAPI.",
+  metadataBase: new URL(site.url),
+  title: site.title,
+  description: site.summary,
   openGraph: {
-    title: "Eshaan Singh — Software Engineer",
-    description: "Software Engineer based in Bellevue, WA. React, Python, FastAPI.",
-    url: "https://eshaans.github.io",
+    title: site.title,
+    description: site.summary,
+    url: site.url,
+    siteName: site.name,
     type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: site.title,
+    description: site.summary,
   },
   icons: {
     icon: "/eshaan.jpg",
