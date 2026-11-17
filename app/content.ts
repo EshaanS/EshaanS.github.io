@@ -76,7 +76,7 @@ export const projects: Project[] = [
     description:
       "A training simulator for competitive Commander (Magic: The Gathering), built solo with no spec.",
     result:
-      "15 Prisma models across 6 migrations, 22 API routes and 260+ Vitest tests.",
+      "15 models across 6 migrations, 22 API routes and 260+ Vitest tests.",
     details: [
       "A Zustand store tracks 24 zones across 4 players, with a stack-based resolver for cast, triggered and activated abilities across 11 trigger event types.",
       "Auth.js accounts with draft, unlisted and public publishing, plus follows, comments with reporting, and notifications, on PostgreSQL and Prisma.",
