@@ -1,38 +1,62 @@
-/* Palette: neutral greys plus one blue accent. Every text pair is WCAG AA or better. */
+/*
+  The ledger sheet.
+
+  Color   Six named tokens. Hairline rules are Ink at a low alpha, not a seventh color.
+          Green means "reconciled" and appears nowhere else.
+  Type    Archivo (set slightly wide) for display, Public Sans for text. No monospace.
+  Radius  One value, only on objects that sit on top of the paper: sheets, buttons, screenshots.
+          Anything ruled (rows, timeline, the trace, stack lists) has square corners.
+  Shadow  One, only on the two featured project sheets. Dark mode shows that level
+          with a lighter sheet instead.
+  Sizing  Everything is rem or em. The root size grows gently with the viewport, so the
+          whole page scales up on large screens instead of shrinking into the middle.
+*/
 :root {
   color-scheme: light dark;
 
-  --bg: #fbfbf9;
-  --card: #ffffff;
-  --surface: #f1f0ec;
-  --text: #17181a;
-  --muted: #54565c;
-  --border: #dddbd3;
-  --border-strong: #8b8d94;
-  --accent: #1a53bf;
-  --accent-hover: #143f94;
-  --on-accent: #ffffff;
-  --nav-bg: rgb(251 251 249 / 0.88);
+  --paper: #f3f5f7;
+  --sheet: #ffffff;
+  --ink: #0f1b2d;
+  --slate: #4a586e;
+  --cobalt: #2547e8;
+  --green: #1f8a5b;
 
-  --sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Menlo, Consolas, monospace;
-  --width: 760px;
-  --gutter: 20px;
+  --sheet-lifted: var(--sheet);
+  --cobalt-press: #1a36c2;
+  --on-cobalt: #ffffff;
+  --rule: color-mix(in srgb, var(--ink) 16%, transparent);
+  --rule-strong: color-mix(in srgb, var(--ink) 45%, transparent);
+
+  --display: var(--font-display), "Segoe UI", Helvetica, Arial, sans-serif;
+  --body: var(--font-text), "Segoe UI", Helvetica, Arial, sans-serif;
+
+  --radius: 0.25rem;
+  --shadow: 0 1px 2px rgb(15 27 45 / 0.06), 0 0.75rem 2rem -0.75rem rgb(15 27 45 / 0.18);
+
+  --page: 62rem;
+  /* In em, so the cap follows each element's own type size. Measured: longest line 70 characters. */
+  --measure: 31.5em;
+  /* The left column shared by the timeline dates, project names and skill labels. */
+  --rail: 11.5rem;
+  --gutter: clamp(1rem, 0.5rem + 3vw, 3rem);
+  --band: clamp(2.75rem, 1.75rem + 4vw, 5.5rem);
+  --nav-height: 3.75rem;
 }
 
+/* Dark is its own sheet: navy, lifted surfaces are lighter, nothing is pure black or white. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0e1012;
-    --card: #15181b;
-    --surface: #1e2226;
-    --text: #e9eaec;
-    --muted: #a6abb3;
-    --border: #2a2f35;
-    --border-strong: #6b727c;
-    --accent: #86b4ff;
-    --accent-hover: #a9caff;
-    --on-accent: #0a1424;
-    --nav-bg: rgb(14 16 18 / 0.88);
+    --paper: #0b1220;
+    --sheet: #121c2e;
+    --ink: #e8edf4;
+    --slate: #9caac0;
+    --cobalt: #8ea4ff;
+    --green: #4cc38a;
+
+    --sheet-lifted: #18243a;
+    --cobalt-press: #b4c3ff;
+    --on-cobalt: #0b1220;
+    --shadow: none;
   }
 }
 
@@ -43,34 +67,51 @@
 }
 
 html {
+  font-size: clamp(100%, 85% + 0.25vw, 150%);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--nav-height) + 0.75rem);
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
   font-size: 1rem;
-  line-height: 1.65;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
 a { color: inherit; }
 
+h1, h2, h3,
+.hero-role,
+.figures strong {
+  font-family: var(--display);
+  font-stretch: 112%;
+}
+
 /* Avoid one-word last lines where the browser supports it. */
 p, li, dd { text-wrap: pretty; }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--cobalt);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: var(--radius);
 }
 
-.container {
-  max-width: calc(var(--width) + 2 * var(--gutter));
-  margin: 0 auto;
-  padding: 0 var(--gutter);
+/*
+  Centered column. The padding also clears the notch on phones held sideways.
+  Each column is a query container, so the layouts inside respond to the room
+  they are given rather than to the viewport.
+*/
+.wrap {
+  container-type: inline-size;
+  box-sizing: content-box;
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
 }
 
 .sr-only {
@@ -85,286 +126,392 @@ p, li, dd { text-wrap: pretty; }
 .skip-link {
   position: absolute;
   left: var(--gutter);
-  top: -100px;
+  top: -6rem;
   z-index: 20;
-  padding: 10px 16px;
-  border-radius: 8px;
-  background: var(--accent);
-  color: var(--on-accent);
+  padding: 0.625rem 1rem;
+  border-radius: var(--radius);
+  background: var(--cobalt);
+  color: var(--on-cobalt);
   font-weight: 600;
   text-decoration: none;
 }
 
-.skip-link:focus { top: 8px; }
+.skip-link:focus { top: 0.5rem; }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.25rem 1.125rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.btn:hover { border-color: var(--ink); }
+
+.btn-primary {
+  background: var(--cobalt);
+  border-color: var(--cobalt);
+  color: var(--on-cobalt);
+}
+
+.btn-primary:hover {
+  background: var(--cobalt-press);
+  border-color: var(--cobalt-press);
+}
 
 /* Nav */
 .nav {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: var(--nav-bg);
+  padding-top: env(safe-area-inset-top);
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--rule);
 }
 
 .nav-inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  min-height: 52px;
+  gap: 0.75rem;
+  min-height: var(--nav-height);
 }
 
+/* If a very large text size ever makes the links too wide, they scroll and Resume stays put. */
 .nav ul {
   display: flex;
-  gap: 22px;
+  gap: clamp(0.125rem, 2vw, 1.5rem);
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
   list-style: none;
 }
 
-.nav a {
-  display: inline-block;
-  padding: 14px 0;
-  color: var(--muted);
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.5;
-  text-decoration: none;
-  transition: color 0.15s;
-}
+.nav ul::-webkit-scrollbar { display: none; }
 
-.nav a:hover { color: var(--text); }
-
-.nav a.nav-resume {
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.nav a.nav-resume:hover { color: var(--accent-hover); }
-
-/* Hero */
-.hero { padding: 72px 0 64px; }
-
-.hero h1 {
-  font-size: clamp(2.25rem, 1.5rem + 3.6vw, 3.25rem);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-}
-
-.hero-role {
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 1.125rem;
-  font-weight: 500;
-}
-
-.hero-summary {
-  margin-top: 24px;
-  max-width: 34em;
-  font-size: clamp(1.125rem, 1rem + 0.6vw, 1.3125rem);
-  line-height: 1.5;
-}
-
-.hero-location {
-  margin-top: 12px;
-  color: var(--muted);
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 28px;
-}
-
-.btn {
+.nav li a {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  min-height: 44px;
-  padding: 0 18px;
-  border: 1px solid var(--border-strong);
-  border-radius: 8px;
-  color: var(--text);
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  color: var(--slate);
   font-size: 0.9375rem;
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
-  transition: background-color 0.15s, border-color 0.15s;
-}
-
-.btn:hover { border-color: var(--text); }
-
-.btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent);
-}
-
-.btn-primary:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-}
-
-/* Sections */
-.section {
-  padding: 56px 0;
-  border-top: 1px solid var(--border);
-  scroll-margin-top: 52px;
-}
-
-.section h2 {
-  margin-bottom: 24px;
-  font-size: 1.375rem;
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: -0.015em;
-}
-
-.bullets {
-  display: grid;
-  gap: 10px;
-  max-width: 68ch;
-  padding-left: 1.15em;
-}
-
-.bullets li::marker { color: var(--border-strong); }
-
-/* Cards: one per role and one per project */
-.cards {
-  display: grid;
-  gap: 16px;
-}
-
-.card {
-  padding: 24px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--card);
-  transition: border-color 0.15s;
-}
-
-.card:hover { border-color: var(--border-strong); }
-
-.card-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0 16px;
-}
-
-.card h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.card-org { font-weight: 500; }
-
-.card-org span {
-  color: var(--muted);
-  font-weight: 400;
-}
-
-/* Location sits beside the company; on small screens it drops to its own line. */
-.card-org span::before { content: "\00a0\00b7\00a0"; }
-
-.card-dates,
-.card-note {
-  color: var(--muted);
-  font-size: 0.9375rem;
-}
-
-.card-links {
-  display: flex;
-  gap: 18px;
-  list-style: none;
-}
-
-.card-links a {
-  display: inline-block;
-  padding: 4px 0;
-  color: var(--accent);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  text-decoration: none;
+  white-space: nowrap;
   transition: color 0.15s;
 }
 
-.card-links a:hover {
-  color: var(--accent-hover);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+.nav li a:hover { color: var(--ink); }
+
+.nav .btn { flex: none; }
+
+/* Hero */
+.hero {
+  padding-top: clamp(2.25rem, 1rem + 6vw, 6rem);
+  padding-bottom: var(--band);
 }
 
-.highlights {
+/* The name is sized to the column, so it fills a phone and can never wrap or overflow. */
+.name {
+  font-size: clamp(2rem, 9vw, 5.5rem);
+  font-size: min(12cqi, 5.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+/*
+  The trace: the rule under the name. One unit moves from Shipment to Payout and
+  lands reconciled. The finished state is the default style and the animation plays
+  from the start state, so reduced-motion users and narrow screens simply see the
+  finished line.
+*/
+.trace {
+  --unit: 0.75rem;
+  --slot: 0.5rem;
+  --hop: 0.6s;
+  --wait: 0.5s;
+  margin-top: clamp(0.75rem, 0.4rem + 1.4cqi, 1.25rem);
+}
+
+.trace-track {
+  container-type: inline-size;
+  position: relative;
+  height: 1rem;
+}
+
+.trace-track::before,
+.trace-line {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--rule-strong);
+  transform: translateY(-50%);
+}
+
+.trace-line {
+  height: 2px;
+  background: var(--cobalt);
+  transform-origin: left center;
+}
+
+.trace-slot,
+.trace-unit,
+.trace-end {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+/* One slot per stage, i = 0..4. */
+.trace-slot {
+  left: calc(var(--i) / 5 * (100% - var(--slot)));
+  width: var(--slot);
+  height: var(--slot);
+  background: var(--cobalt);
+  box-shadow: 0 0 0 2px var(--paper);
+}
+
+.trace-end {
+  right: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px 24px;
-  margin-top: 18px;
-  padding: 16px 0;
-  border-block: 1px solid var(--border);
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  background: var(--green);
+  color: var(--paper);
+  box-shadow: 0 0 0 2px var(--paper);
+}
+
+.trace-end svg {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+.trace-unit {
+  left: 0;
+  width: var(--unit);
+  height: var(--unit);
+  background: var(--cobalt);
+  box-shadow: 0 0 0 2px var(--paper);
+  opacity: 0;
+}
+
+/* Narrow: the stage names are a plain wrapped list, in order. */
+.trace-stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.875rem;
+  margin-top: 0.5rem;
+  color: var(--slate);
+  font-size: 0.875rem;
+  line-height: 1.5;
   list-style: none;
 }
 
-.highlights strong {
-  display: block;
-  font-size: 1.5rem;
+.trace-stages li { white-space: nowrap; }
+
+.trace-stages li:last-child {
+  margin-left: auto;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Wide enough: each name sits under its own slot, and the trace runs once. */
+@container (min-width: 36rem) {
+  .trace-stages {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 0;
+  }
+
+  .trace-stages li {
+    grid-column: var(--col) / span 2;
+    grid-row: 1;
+    justify-self: center;
+  }
+
+  .trace-stages li:first-child {
+    grid-column: 1 / span 1;
+    justify-self: start;
+  }
+
+  .trace-stages li:last-child {
+    grid-column: 10 / span 1;
+    justify-self: end;
+    margin-left: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .trace-line { animation: trace-line calc(var(--hop) * 5) var(--wait) both; }
+    .trace-unit { animation: trace-unit calc(var(--hop) * 5 + 0.3s) var(--wait) both; }
+
+    .trace-slot {
+      animation: trace-fill 0.2s calc(var(--wait) + var(--i) * var(--hop) - 0.1s) both;
+    }
+
+    .trace-end { animation: trace-fill 0.3s calc(var(--wait) + var(--hop) * 5 - 0.05s) both; }
+    .trace-end svg { animation: trace-check 0.3s calc(var(--wait) + var(--hop) * 5 + 0.1s) both; }
+    .trace-stages li:last-child { animation: trace-word 0.3s calc(var(--wait) + var(--hop) * 5) both; }
+  }
+}
+
+/* Five hops with a short rest at each stage. */
+@keyframes trace-unit {
+  0% { opacity: 1; transform: translateX(0); }
+  13%, 18% { transform: translateX(calc(0.2 * (100cqi - var(--unit)))); }
+  31%, 36% { transform: translateX(calc(0.4 * (100cqi - var(--unit)))); }
+  49%, 54% { transform: translateX(calc(0.6 * (100cqi - var(--unit)))); }
+  67%, 72% { transform: translateX(calc(0.8 * (100cqi - var(--unit)))); }
+  85%, 91% { opacity: 1; transform: translateX(calc(100cqi - var(--unit))); }
+  100% { opacity: 0; transform: translateX(calc(100cqi - var(--unit))); }
+}
+
+@keyframes trace-line {
+  0% { transform: translateY(-50%) scaleX(0); }
+  14.3%, 20% { transform: translateY(-50%) scaleX(0.2); }
+  34.3%, 40% { transform: translateY(-50%) scaleX(0.4); }
+  54.3%, 60% { transform: translateY(-50%) scaleX(0.6); }
+  74.3%, 80% { transform: translateY(-50%) scaleX(0.8); }
+  94.3%, 100% { transform: translateY(-50%) scaleX(1); }
+}
+
+@keyframes trace-fill {
+  from {
+    background: var(--paper);
+    box-shadow: 0 0 0 2px var(--paper), inset 0 0 0 1px var(--rule-strong);
+  }
+}
+
+@keyframes trace-check {
+  from { opacity: 0; scale: 0.4; }
+}
+
+@keyframes trace-word {
+  from { color: var(--slate); }
+}
+
+.hero-body {
+  display: grid;
+  gap: 1.5rem 3rem;
+  margin-top: clamp(1.75rem, 1rem + 3cqi, 3rem);
+}
+
+.hero-role {
+  font-size: clamp(1.1875rem, 1.05rem + 0.8cqi, 1.5rem);
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.hero-summary {
+  /* A little tighter than body text: the larger type packs more characters per em. */
+  max-width: 29.5em;
+  margin-top: 0.75rem;
+  font-size: clamp(1.0625rem, 1rem + 0.3cqi, 1.1875rem);
+  line-height: 1.55;
+}
+
+.hero-location { color: var(--slate); }
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+  max-width: 22rem;
+  margin-top: 1rem;
+}
+
+/* Wide hero: location and buttons move beside the summary, under the end of the trace. */
+@container (min-width: 54rem) {
+  .hero-body {
+    grid-template-columns: minmax(0, 1fr) max-content;
+    align-items: start;
+  }
+
+  .hero-side { padding-top: 0.25rem; }
+  .actions { grid-template-columns: repeat(2, minmax(7.5rem, 1fr)); }
+}
+
+/* Bands: each section's top rule runs the full width of the viewport. */
+.band {
+  padding-block: var(--band);
+  border-top: 1px solid var(--rule);
+}
+
+.band h2 {
+  margin-bottom: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+  font-size: clamp(1.5rem, 1.25rem + 1.2vw, 2.25rem);
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
 }
 
-.highlights span {
-  display: block;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.45;
-  text-wrap: balance;
+h3 {
+  font-size: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
-.card-text,
-.card .bullets {
-  margin-top: 14px;
-  font-size: 0.9375rem;
+/* Shared pieces inside cards and rows */
+.bullets {
+  display: grid;
+  gap: 0.5rem;
+  max-width: var(--measure);
+  padding-left: 1.1em;
 }
 
-.card-text { max-width: 68ch; }
-.card .bullets { gap: 8px; }
+.bullets li::marker { color: var(--rule-strong); }
+
+.card-text { max-width: var(--measure); }
 
 /* "Show more" toggle: a native <details>, so it works without JavaScript. */
-.more { margin-top: 8px; }
+.more { margin-top: 0.5rem; }
 
 .more summary {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 8px 0;
-  color: var(--accent);
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  color: var(--cobalt);
   font-size: 0.9375rem;
   font-weight: 600;
   list-style: none;
   cursor: pointer;
-  transition: color 0.15s;
 }
 
 .more summary::-webkit-details-marker { display: none; }
-.more summary:hover { color: var(--accent-hover); }
+.more summary:hover { color: var(--cobalt-press); }
 
 .more summary::before {
   content: "";
-  width: 7px;
-  height: 7px;
-  margin-left: 2px;
+  width: 0.45em;
+  height: 0.45em;
+  margin-inline: 0.15em;
   border-right: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
-  transform: translateY(-2px) rotate(45deg);
-  transition: transform 0.15s;
+  transform: translateY(-20%) rotate(45deg);
 }
 
-.more[open] summary::before { transform: translateY(2px) rotate(-135deg); }
+.more[open] summary::before { transform: translateY(20%) rotate(-135deg); }
 
 .more-open,
 .more[open] .more-closed { display: none; }
@@ -377,92 +524,354 @@ p, li, dd { text-wrap: pretty; }
   align-items: flex-start;
 }
 
-.more[open] summary { margin-top: 6px; }
-.card .more .bullets { margin-top: 0; }
-
-.tags {
+.links {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 18px;
+  gap: 0 1.25rem;
   list-style: none;
 }
 
-.tags li {
-  padding: 2px 8px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  line-height: 1.6;
+.links a {
+  display: inline-flex;
+  align-items: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  color: var(--cobalt);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
 }
 
-/* Skills */
-.skills {
+.links a:hover { color: var(--cobalt-press); }
+
+/* The stack is a plain sentence-style list, not chips. */
+.stack {
+  max-width: var(--measure);
+  color: var(--slate);
+  font-size: 0.875rem;
+  list-style: none;
+}
+
+.stack li { display: inline; }
+.stack li:not(:last-child)::after { content: ", "; }
+
+.project-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+}
+
+.project-head h3 { padding-block: 0.6rem; }
+
+.project-note {
+  margin-top: -0.6rem;
+  padding-bottom: 0.6rem;
+  color: var(--slate);
+  font-size: 0.9375rem;
+}
+
+.shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+/* Experience: a date column on the paper, one sheet per role. */
+.timeline {
   display: grid;
-  gap: 12px;
+  gap: 1.25rem;
 }
 
+.role {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.role-when {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.role-dates {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.role-place { color: var(--slate); }
+
+.role-sheet {
+  padding: clamp(1rem, 0.75rem + 1.5cqi, 1.75rem);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--sheet);
+}
+
+.role-org {
+  margin-top: 0.125rem;
+  font-weight: 600;
+}
+
+.role-sheet .bullets,
+.role-sheet .card-text { margin-top: 1rem; }
+
+/* Figures: a ruled row inside the sheet. */
+.figures {
+  display: grid;
+  gap: 0.75rem 2rem;
+  margin-top: 1rem;
+  padding-block: 0.875rem;
+  border-block: 1px solid var(--rule);
+  list-style: none;
+}
+
+.figures li {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  align-items: baseline;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.figures strong {
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.figures span {
+  color: var(--slate);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* Room for the date column: dates move left of the sheet and a margin rule joins the roles. */
+@container (min-width: 46rem) {
+  .timeline { gap: 0; }
+
+  .role {
+    position: relative;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    gap: 0 2.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .role:last-child { padding-bottom: 0; }
+
+  /* The margin rule. */
+  .role::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--rail) + 1.25rem);
+    width: 1px;
+    background: var(--rule);
+  }
+
+  .role:first-child::before { top: 1.75rem; }
+  .role:last-child::before { bottom: auto; height: 1.75rem; }
+
+  /* One marker per role on the rule; the current role's is filled. */
+  .role::after {
+    content: "";
+    position: absolute;
+    top: 1.75rem;
+    left: calc(var(--rail) + 1.25rem);
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--paper);
+    box-shadow: inset 0 0 0 1px var(--rule-strong);
+    translate: -50% -50%;
+  }
+
+  .role-current::after {
+    background: var(--cobalt);
+    box-shadow: none;
+  }
+
+  .role-when {
+    display: block;
+    padding-top: 1.2rem;
+    text-align: right;
+  }
+
+  .figures { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .figures li {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .figures strong { font-size: 1.625rem; }
+}
+
+/* Projects: three tiers. */
+.tier + .tier { margin-top: 1.25rem; }
+
+/* Tier one: large lifted sheets. */
+.tier-large {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.feature {
+  display: grid;
+  gap: 0.75rem;
+  padding: clamp(1rem, 0.75rem + 1.5cqi, 2rem);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--sheet-lifted);
+  box-shadow: var(--shadow);
+}
+
+.feature h3 { font-size: clamp(1.25rem, 1.1rem + 1cqi, 1.75rem); }
+.feature-head .shot { margin-top: 0.5rem; }
+
+@container (min-width: 46rem) {
+  .feature {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+    grid-template-rows: auto 1fr;
+    gap: 1rem 2.5rem;
+  }
+
+  .feature-body {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    padding-top: 0.6rem;
+  }
+
+  .feature .stack {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .feature .project-head { display: block; }
+}
+
+/* Tier two: flat sheets led by a screenshot. */
+.tier-shots {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.shotcard {
+  display: grid;
+  align-content: start;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--sheet);
+}
+
+.shotcard .shot {
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.shotcard-body {
+  display: grid;
+  gap: 0.75rem;
+  padding: clamp(1rem, 0.75rem + 1.5cqi, 1.5rem);
+  padding-top: 0.5rem;
+}
+
+@container (min-width: 46rem) {
+  .tier-shots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Tier three: ruled rows on the paper, no box. */
+.tier-rows { margin-top: 2rem; }
+
+.row {
+  display: grid;
+  gap: 0.25rem;
+  padding-block: 1rem;
+  border-top: 1px solid var(--rule);
+}
+
+.row:last-child { border-bottom: 1px solid var(--rule); }
+
+.row-body {
+  display: grid;
+  gap: 0.5rem;
+}
+
+@container (min-width: 46rem) {
+  .row {
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    gap: 0 2.5rem;
+  }
+
+  .row .project-head { display: block; }
+  .row-body { padding-top: 0.6rem; }
+}
+
+/* Skills: ruled rows on the same column as the project rows. */
 .skills div {
   display: grid;
-  grid-template-columns: 8.5rem 1fr;
-  gap: 0 16px;
+  gap: 0.125rem;
+  padding-block: 0.75rem;
+  border-top: 1px solid var(--rule);
 }
 
+.skills div:last-child { border-bottom: 1px solid var(--rule); }
+
 .skills dt { font-weight: 600; }
-.skills dd { color: var(--muted); }
+
+.skills dd {
+  max-width: var(--measure);
+  color: var(--slate);
+}
+
+@container (min-width: 46rem) {
+  .skills div {
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    gap: 0 2.5rem;
+  }
+}
 
 /* Footer */
+footer.band { padding-block: 1.25rem calc(1.25rem + env(safe-area-inset-bottom)); }
+
 .footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 4px 24px;
-  padding: 24px 0 48px;
-  border-top: 1px solid var(--border);
-  color: var(--muted);
+  gap: 0 1.5rem;
+  color: var(--slate);
   font-size: 0.875rem;
 }
 
 .footer ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 20px;
+  gap: 0 1.25rem;
   list-style: none;
 }
 
 .footer a {
-  display: inline-block;
-  padding: 6px 0;
+  display: inline-flex;
+  align-items: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   text-decoration: none;
-  transition: color 0.15s;
+  overflow-wrap: anywhere;
 }
 
-.footer a:hover { color: var(--text); }
-
-/* Small screens */
-@media (max-width: 560px) {
-  .hero { padding: 48px 0 44px; }
-  .section { padding: 44px 0; }
-  .card { padding: 20px; }
-  .card-org span { display: block; font-size: 0.9375rem; }
-  .card-org span::before { content: none; }
-
-  .highlights { grid-template-columns: 1fr; gap: 10px; }
-  .highlights li { display: flex; align-items: baseline; gap: 12px; }
-  .highlights strong { flex: 0 0 5.25rem; font-size: 1.25rem; }
-  .highlights span { margin-top: 0; }
-
-  .skills div { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 440px) {
-  .actions { display: grid; grid-template-columns: 1fr 1fr; }
-  .footer li:first-child { flex-basis: 100%; }
-}
+.footer a:hover { color: var(--ink); }
 
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }

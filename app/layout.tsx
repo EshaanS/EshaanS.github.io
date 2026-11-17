@@ -1,10 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Archivo, Public_Sans } from "next/font/google";
 import { site } from "./content";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+// Display face: name, headings, role and project names, figures.
+// The width axis is loaded so the CSS can set it slightly wide (font-stretch).
+const display = Archivo({
+  variable: "--font-display",
+  subsets: ["latin"],
+  display: "swap",
+  axes: ["wdth"],
+});
+
+// Text face: everything else.
+const text = Public_Sans({
+  variable: "--font-text",
   subsets: ["latin"],
   display: "swap",
 });
@@ -44,9 +54,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // Lets the page paint under the notch; .wrap and .nav add the safe-area padding back.
+  viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfbf9" },
-    { media: "(prefers-color-scheme: dark)", color: "#0e1012" },
+    { media: "(prefers-color-scheme: light)", color: "#f3f5f7" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1220" },
   ],
 };
 
@@ -56,7 +68,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${display.variable} ${text.variable}`}>
       <body>{children}</body>
     </html>
   );
