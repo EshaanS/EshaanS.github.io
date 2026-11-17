@@ -29,6 +29,10 @@ public/resume.pdf
 
 The filename has to be exactly `resume.pdf`. Commit it and push to `main`, and the button works.
 
+## Link preview image
+
+`public/og.png` (1200x630) is the image shown when the site is shared on LinkedIn, Slack, X and similar. It contains the name, role and the one-line summary as text, so if you change the summary in `app/content.ts`, replace this image too.
+
 ## Tech Stack
 
 Next.js, TypeScript, React, CSS

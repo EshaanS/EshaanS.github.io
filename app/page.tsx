@@ -1,58 +1,90 @@
 import { also, experience, projects, site, skills } from "./content";
 
+function ExternalLink({ href, className, children }: { href: string; className?: string; children: React.ReactNode }) {
+  return (
+    <a className={className} href={href} target="_blank" rel="noopener noreferrer">
+      {children}
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
+  );
+}
+
 export default function Home() {
   return (
-      <div>
-        <nav className="navbar">
-          <a href="#" className="navbar-logo">eshaan.singh</a>
-          <ul className="navbar-links">
+    <>
+      <a className="skip-link" href="#main">Skip to content</a>
+
+      <nav className="nav" aria-label="Page sections">
+        <div className="container nav-inner">
+          <ul>
             <li><a href="#experience">Experience</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#skills">Skills</a></li>
-            <li><a href={`mailto:${site.email}`}>Contact</a></li>
           </ul>
-        </nav>
+          <ExternalLink className="nav-resume" href={site.resume}>Resume</ExternalLink>
+        </div>
+      </nav>
 
-        <div className="content">
-          <div className="hero">
-            <h1>Eshaan <span>Singh</span></h1>
-            <p className="hero-sub">{site.role}</p>
-            <p className="hero-summary">{site.summary}</p>
-            <p className="hero-location">{site.location}</p>
-            <div className="hero-links">
-              <a className="link-resume" href={site.resume} target="_blank" rel="noopener">Resume</a>
-              <a href={site.github} target="_blank" rel="noopener">GitHub</a>
-              <a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-              <a href={`mailto:${site.email}`}>Email</a>
-            </div>
+      <main className="container" id="main">
+        <header className="hero">
+          <h1>{site.name}</h1>
+          <p className="hero-role">{site.role}</p>
+          <p className="hero-summary">{site.summary}</p>
+          <p className="hero-location">{site.location}</p>
+          <div className="actions">
+            <ExternalLink className="btn btn-primary" href={site.resume}>Resume</ExternalLink>
+            <ExternalLink className="btn" href={site.github}>GitHub</ExternalLink>
+            <ExternalLink className="btn" href={site.linkedin}>LinkedIn</ExternalLink>
+            <a className="btn" href={`mailto:${site.email}`}>Email</a>
           </div>
+        </header>
 
-          <section className="section" id="experience">
-            <div className="section-label">Experience</div>
+        <section className="section" id="experience" aria-labelledby="experience-heading">
+          <h2 id="experience-heading">Experience</h2>
 
-            {experience.map((job) => (
-              <div className="job" key={job.company}>
-                <div className="job-head">
-                  <div className="job-title">{job.title}, {job.company}</div>
-                  <div className="job-dates">{job.dates}</div>
-                </div>
-                <ul className="bullets">
-                  {job.bullets.map((bullet) => (
-                    <li key={bullet}>{bullet}</li>
-                  ))}
-                </ul>
+          {experience.map((job) => (
+            <article className="job" key={job.company}>
+              <div className="job-head">
+                <h3>{job.title}, {job.company}</h3>
+                <p className="job-dates">{job.dates}</p>
               </div>
-            ))}
-          </section>
+              <ul className="highlights">
+                {job.highlights.map((highlight) => (
+                  <li key={highlight.label}>
+                    <strong>{highlight.value}</strong>
+                    <span>{highlight.label}</span>
+                  </li>
+                ))}
+              </ul>
+              <ul className="bullets">
+                {job.bullets.map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </section>
 
-          <section className="section" id="projects">
-            <div className="section-label">Projects</div>
+        <section className="section" id="projects" aria-labelledby="projects-heading">
+          <h2 id="projects-heading">Projects</h2>
 
+          <div className="cards">
             {projects.map((project) => (
-              <div className="project" key={project.name}>
-                <div className="project-name">{project.name}</div>
-                <p className="project-desc">{project.description}</p>
-                {project.result && <p className="project-result">{project.result}</p>}
+              <article className="card" key={project.name}>
+                <div className="card-head">
+                  <h3>{project.name}</h3>
+                  <ul className="card-links" aria-label={`${project.name} links`}>
+                    {project.links.map((link) => (
+                      <li key={link.href}>
+                        <ExternalLink href={link.href}>
+                          {link.label}<span className="sr-only">: {project.name}</span>
+                        </ExternalLink>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <p className="card-desc">{project.description}</p>
+                {project.result && <p className="card-result">{project.result}</p>}
                 {project.details && (
                   <ul className="bullets">
                     {project.details.map((detail) => (
@@ -60,58 +92,53 @@ export default function Home() {
                     ))}
                   </ul>
                 )}
-                <div className="project-footer">
-                  <div className="tags">
-                    {project.tags.map((tag) => (
-                      <span className="tag" key={tag}>{tag}</span>
-                    ))}
-                  </div>
-                  <div className="project-links">
-                    {project.links.map((link) => (
-                      <a
-                          className={link.label === "Live" ? "link-primary" : undefined}
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener"
-                          key={link.href}
-                      >
-                        {link.label}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
+                <ul className="tags" aria-label="Stack">
+                  {project.tags.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
+                </ul>
+              </article>
             ))}
-          </section>
+          </div>
+        </section>
 
-          <section className="section" id="also">
-            <div className="section-label">Also</div>
+        <section className="section" id="also" aria-labelledby="also-heading">
+          <h2 id="also-heading">Also</h2>
 
+          <div className="also">
             {also.map((item) => (
-              <div className="also-item" key={item.name}>
-                <div className="also-name">{item.name}</div>
-                <p className="project-desc">{item.description}</p>
+              <article key={item.name}>
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section" id="skills" aria-labelledby="skills-heading">
+          <h2 id="skills-heading">Skills</h2>
+
+          <dl className="skills">
+            {skills.map((group) => (
+              <div key={group.label}>
+                <dt>{group.label}</dt>
+                <dd>{group.items.join(", ")}</dd>
               </div>
             ))}
-          </section>
+          </dl>
+        </section>
+      </main>
 
-          <section className="section" id="skills">
-            <div className="section-label">Skills</div>
-            <div className="skills-grid">
-              {skills.map((group) => (
-                <div key={group.label}>
-                  <div className="skill-label">{group.label}</div>
-                  <div className="skill-items">{group.items.join(", ")}</div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <footer className="footer">
-            <p>© 2026 Eshaan Singh</p>
-            <a href={`mailto:${site.email}`}>{site.email}</a>
-          </footer>
+      <footer className="container">
+        <div className="footer">
+          <p>© 2026 {site.name}</p>
+          <ul>
+            <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+            <li><ExternalLink href={site.github}>GitHub</ExternalLink></li>
+            <li><ExternalLink href={site.linkedin}>LinkedIn</ExternalLink></li>
+          </ul>
         </div>
-      </div>
+      </footer>
+    </>
   );
 }

@@ -6,6 +6,8 @@ export type Job = {
   title: string;
   company: string;
   dates: string;
+  // Figures pulled straight from the bullets, shown above them for skimmers.
+  highlights: { value: string; label: string }[];
   bullets: string[];
 };
 
@@ -37,6 +39,11 @@ export const experience: Job[] = [
     title: "Software Developer",
     company: "TechMagnet",
     dates: "Sep 2026 to present",
+    highlights: [
+      { value: "94", label: "inbound shipments traced unit by unit" },
+      { value: "685", label: "automated tests maintained" },
+      { value: "~15 hrs", label: "of manual shipment tracking saved each week" },
+    ],
     bullets: [
       "Built an end-to-end Amazon FBA reconciliation platform (Python, Amazon SP-API, SQL Server, C#/.NET WinForms) that traces every unit across 94 inbound shipments through sale, return, reimbursement and payout, replacing manual reconciliation in Seller Central.",
       "Designed the reconciliation engine: FIFO unit allocation across shipments, a close-out rule under which a shipment closes only when every unit is paid, reimbursed or written off, carry-forward of open issues, and write-off and claims registers with a full audit trail.",
