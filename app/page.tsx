@@ -1,143 +1,144 @@
+import { also, experience, projects, site, skills } from "./content";
+
+function ExternalLink({ href, className, children }: { href: string; className?: string; children: React.ReactNode }) {
+  return (
+    <a className={className} href={href} target="_blank" rel="noopener noreferrer">
+      {children}
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
+  );
+}
+
 export default function Home() {
   return (
-      <div>
-        <nav className="navbar">
-          <a href="#" className="navbar-logo">eshaan.singh</a>
-          <ul className="navbar-links">
+    <>
+      <a className="skip-link" href="#main">Skip to content</a>
+
+      <nav className="nav" aria-label="Page sections">
+        <div className="container nav-inner">
+          <ul>
+            <li><a href="#experience">Experience</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#skills">Skills</a></li>
-            <li><a href="mailto:eshaan.singh09@gmail.com">Contact</a></li>
           </ul>
-        </nav>
-
-        <div className="content">
-          <div className="hero">
-            <h1>Eshaan <span>Singh</span></h1>
-            <p className="hero-sub">Software Engineer &nbsp;·&nbsp; Bellevue, WA</p>
-            <div className="hero-links">
-              <a href="https://github.com/EshaanS" target="_blank" rel="noopener">GitHub</a>
-              <a href="https://linkedin.com/in/eshaan-singh-72306021a" target="_blank" rel="noopener">LinkedIn</a>
-              <a href="mailto:eshaan.singh09@gmail.com">Email</a>
-            </div>
-          </div>
-
-          <section className="section" id="projects">
-            <div className="section-label">Projects</div>
-
-            <div className="project">
-              <div className="project-name">TrainingARK</div>
-              <p className="project-desc">
-                A training simulator for competitive Commander (Magic: The Gathering), built solo with no spec. A Zustand store tracks 24 zones across 4 players, with a stack-based resolver for cast, triggered, and activated abilities across 11 trigger event types. Accounts (Auth.js), draft/unlisted/public publishing, follows, comments with reporting, and notifications on PostgreSQL/Prisma (15 models, 22 API routes), with 260+ Vitest tests.
-              </p>
-              <div className="project-footer">
-                <div className="tags">
-                  <span className="tag">Next.js</span>
-                  <span className="tag">React</span>
-                  <span className="tag">TypeScript</span>
-                  <span className="tag">Zustand</span>
-                  <span className="tag">Prisma</span>
-                  <span className="tag">Supabase</span>
-                </div>
-                <div className="project-links">
-                  <a className="link-primary" href="https://trainingark.vercel.app" target="_blank" rel="noopener">Live</a>
-                  <a href="https://github.com/EshaanS/TrainingARK" target="_blank" rel="noopener">GitHub</a>
-                </div>
-              </div>
-            </div>
-
-            <div className="project">
-              <div className="project-name">FinSight</div>
-              <p className="project-desc">
-                Financial data platform built with Go and Python. Ingests real stock market data, stores it in PostgreSQL, and lets users query it in plain English using Gemini AI.
-              </p>
-              <div className="project-footer">
-                <div className="tags">
-                  <span className="tag">Go</span>
-                  <span className="tag">Python</span>
-                  <span className="tag">FastAPI</span>
-                  <span className="tag">PostgreSQL</span>
-                  <span className="tag">React</span>
-                  <span className="tag">TypeScript</span>
-                  <span className="tag">Gemini</span>
-                </div>
-                <div className="project-links">
-                  <a className="link-primary" href="https://eshaan-finsight.vercel.app" target="_blank" rel="noopener">Live</a>
-                  <a href="https://github.com/EshaanS/FinSight" target="_blank" rel="noopener">GitHub</a>
-                </div>
-              </div>
-            </div>
-
-            <div className="project">
-              <div className="project-name">MarketMind</div>
-              <p className="project-desc">
-                AI marketing content generator. Input a brand and product, get consumer personas, SWOT analysis, and marketing copy — with structured JSON output parsing via Gemini.
-              </p>
-              <div className="project-footer">
-                <div className="tags">
-                  <span className="tag">Next.js</span>
-                  <span className="tag">TypeScript</span>
-                  <span className="tag">Gemini</span>
-                  <span className="tag">Tailwind</span>
-                </div>
-                <div className="project-links">
-                  <a href="https://github.com/EshaanS/MarketMind" target="_blank" rel="noopener">GitHub</a>
-                </div>
-              </div>
-            </div>
-
-            <div className="project">
-              <div className="project-name">Mod the Agents</div>
-              <p className="project-desc">
-                Real-time multi-agent debate platform built for the Cerebras x Google DeepMind Gemma 4 Hackathon. Four agents with distinct perspectives contest any input in parallel, streamed live over SSE with token batching, plus a mid-debate human injection flow feeding a synthesis agent for a final verdict.
-              </p>
-              <div className="project-footer">
-                <div className="tags">
-                  <span className="tag">React</span>
-                  <span className="tag">TypeScript</span>
-                  <span className="tag">Vite</span>
-                  <span className="tag">Node.js</span>
-                  <span className="tag">Express</span>
-                  <span className="tag">Cerebras</span>
-                </div>
-                <div className="project-links">
-                  <a className="link-primary" href="https://mod-the-agents-front.onrender.com" target="_blank" rel="noopener">Live</a>
-                  <a href="https://github.com/EshaanS/mod-the-agents" target="_blank" rel="noopener">GitHub</a>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="section" id="skills">
-            <div className="section-label">Skills</div>
-            <div className="skills-grid">
-              <div>
-                <div className="skill-label">Frontend</div>
-                <div className="skill-items">React, Next.js, Vite, TypeScript, JavaScript, HTML/CSS, Tailwind, Zustand, Recharts</div>
-              </div>
-              <div>
-                <div className="skill-label">Backend</div>
-                <div className="skill-items">Python, Go, FastAPI, Django, Node.js, Express, REST APIs</div>
-              </div>
-              <div>
-                <div className="skill-label">Databases</div>
-                <div className="skill-items">PostgreSQL, Supabase, SQL, MongoDB</div>
-              </div>
-              <div>
-                <div className="skill-label">Tools</div>
-                <div className="skill-items">Docker, Git, CI/CD, GitHub Actions, Linux, Claude Code, Codex</div>
-              </div>
-              <div>
-                <div className="skill-label">AI / ML</div>
-                <div className="skill-items">Google Gemini, Cerebras, HuggingFace, LLM Integration</div>
-              </div>
-            </div>
-          </section>
-
-          <footer className="footer">
-            <p>© 2026 Eshaan Singh</p>
-            <a href="mailto:eshaan.singh09@gmail.com">eshaan.singh09@gmail.com</a>
-          </footer>
+          <ExternalLink className="nav-resume" href={site.resume}>Resume</ExternalLink>
         </div>
-      </div>
+      </nav>
+
+      <main className="container" id="main">
+        <header className="hero">
+          <h1>{site.name}</h1>
+          <p className="hero-role">{site.role}</p>
+          <p className="hero-summary">{site.summary}</p>
+          <p className="hero-location">{site.location}</p>
+          <div className="actions">
+            <ExternalLink className="btn btn-primary" href={site.resume}>Resume</ExternalLink>
+            <ExternalLink className="btn" href={site.github}>GitHub</ExternalLink>
+            <ExternalLink className="btn" href={site.linkedin}>LinkedIn</ExternalLink>
+            <a className="btn" href={`mailto:${site.email}`}>Email</a>
+          </div>
+        </header>
+
+        <section className="section" id="experience" aria-labelledby="experience-heading">
+          <h2 id="experience-heading">Experience</h2>
+
+          {experience.map((job) => (
+            <article className="job" key={job.company}>
+              <div className="job-head">
+                <h3>{job.title}, {job.company}</h3>
+                <p className="job-dates">{job.dates}</p>
+              </div>
+              <ul className="highlights">
+                {job.highlights.map((highlight) => (
+                  <li key={highlight.label}>
+                    <strong>{highlight.value}</strong>
+                    <span>{highlight.label}</span>
+                  </li>
+                ))}
+              </ul>
+              <ul className="bullets">
+                {job.bullets.map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </section>
+
+        <section className="section" id="projects" aria-labelledby="projects-heading">
+          <h2 id="projects-heading">Projects</h2>
+
+          <div className="cards">
+            {projects.map((project) => (
+              <article className="card" key={project.name}>
+                <div className="card-head">
+                  <h3>{project.name}</h3>
+                  <ul className="card-links" aria-label={`${project.name} links`}>
+                    {project.links.map((link) => (
+                      <li key={link.href}>
+                        <ExternalLink href={link.href}>
+                          {link.label}<span className="sr-only">: {project.name}</span>
+                        </ExternalLink>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <p className="card-desc">{project.description}</p>
+                {project.result && <p className="card-result">{project.result}</p>}
+                {project.details && (
+                  <ul className="bullets">
+                    {project.details.map((detail) => (
+                      <li key={detail}>{detail}</li>
+                    ))}
+                  </ul>
+                )}
+                <ul className="tags" aria-label="Stack">
+                  {project.tags.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section" id="also" aria-labelledby="also-heading">
+          <h2 id="also-heading">Also</h2>
+
+          <div className="also">
+            {also.map((item) => (
+              <article key={item.name}>
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section" id="skills" aria-labelledby="skills-heading">
+          <h2 id="skills-heading">Skills</h2>
+
+          <dl className="skills">
+            {skills.map((group) => (
+              <div key={group.label}>
+                <dt>{group.label}</dt>
+                <dd>{group.items.join(", ")}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      </main>
+
+      <footer className="container">
+        <div className="footer">
+          <p>© 2026 {site.name}</p>
+          <ul>
+            <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+            <li><ExternalLink href={site.github}>GitHub</ExternalLink></li>
+            <li><ExternalLink href={site.linkedin}>LinkedIn</ExternalLink></li>
+          </ul>
+        </div>
+      </footer>
+    </>
   );
 }
